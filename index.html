@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script> -->
+  <script src="bower_components/angular/angular.min.js"></script>
+  <!-- modules -->
+  <script src="./app/my-app.module.js"></script>
+  <!-- controllers -->
+  <script src="./app/main.contoller.js"></script>
+  <style>
+    .red {
+      color: red;
+    }
+    .active {
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body ng-controller="MainController">
+
+  <ul>
+    <!--  -->
+    <li ng-repeat="(key, item) in data | limitTo:10:0 | orderBy:'name':true track by item.id" ng-click="getItemId($index)">
+      <a href="">{{item.name}}</a>
+    </li>
+  </ul>
+
+  <h2>{{selectedItem}}</h2>
+
+  <select ng-model="selectedItem" ng-options="option.id as option.name for option in data">
+    <option value="" disabled="disabled">Выберите шонибудь</option>
+  </select>
+
+
+  <ul>
+    <!--  -->
+    <li ng-repeat="item in dummy">
+      <input type="checkbox" ng-checked="item.isActive">
+      <div>{{item.name}}</div>
+      <div>
+        <img ng-src="{{item.picture}}" alt="img_{{$index}}">
+      </div>
+      <hr>
+    </li>
+  </ul>
+
+
+
+
+
+
+<!--   <h1 ng-if="user.name" ng-style="myStyle">{{user.name}}</h1>
+
+  <a href="http://google.com/{{urlPart}}">Click Me</a>
+
+  <h2>{{user.ready}}</h2>
+
+  <p ng-class="{red: user.ready, active: user.id}">
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim praesentium dicta dolores reprehenderit quam sapiente alias atque aperiam, amet quidem nam placeat velit, maiores. Voluptatibus ut ratione quos, nostrum eligendi.</p>
+  <div>
+    <button ng-click="toggleReady()">Update Model</button>
+  </div>
+  {{isReadOnly}}
+  {{isDisabled}}
+  <input type="text" ng-model="user.name" ng-readonly="isReadOnly" ng-disabled="isDisabled">
+
+  <button ng-click="toggleReadonly()">toggleReadonly</button>
+  <button ng-click="toggleDisabled()">toggleDisabled</button>
+
+ -->
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
