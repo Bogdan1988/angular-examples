@@ -1,35 +1,42 @@
 angular.module('myApp')
-.controller('MainController', function($scope, $http, $timeout, feed){
-	// Call feed data from service.
-	feed.async().then(function(d) {
-		$scope.dummy = d;
+.controller('MainController', function($scope, $timeout, HTTP){
+
+	$scope.currentPage = 0;
+	$scope.count = 10;
+	$scope.loading = true;
+
+	$scope.options = [
+		{count:5, 	name: 'five'},
+		{count:10, name: 'ten'},
+		{count:20, name: 'twenty'},
+		{count:30, name: 'thirty'}
+	];
+
+	$scope.changePage = function(index) {
+		$scope.currentPage = index;
+		$scope.offset = $scope.count * index;
+	};
+
+	$scope.$watch('count', function(newValue) {
+		if ($scope.data)
+			initPagination($scope.data);
+
 	});
 
-    $timeout(function() {
-        $scope.pages = new Array;
-        for (page = 1; page < $scope.dummy.length / $scope.pageSize + 1; page++) {
-            $scope.pages.push(page);
-        }
-    }, 100);
 
+	HTTP.getData()
+		.then(initPagination)
+		.finally(function() {
+			$scope.loading = false;
+		});
 
-    // Set pagination variables.
-    $scope.firstItem = 0;
-    $scope.pageSize = 10;
-    $scope.currentPage = 1;
+	function initPagination(data) {
+		if (!$scope.data)
+			$scope.data = data;
 
-    $scope.nextPage = function () {
-        $scope.firstItem = $scope.firstItem + $scope.pageSize;
-        $scope.currentPage++;
-    }
+		$scope.totalPages = $scope.count ? Math.ceil(data.length / $scope.count) : 1;
+		$scope.pagingButtons = new Array($scope.totalPages);
+		// $scope.changePage(0);
+	}
 
-    $scope.previousPage = function () {
-        $scope.firstItem = $scope.firstItem - $scope.pageSize;
-        $scope.currentPage--;
-    }
-
-    $scope.gotoPage = function (page) {
-        $scope.currentPage = page;
-        $scope.firstItem = (page - 1) * $scope.pageSize;
-    }
 });

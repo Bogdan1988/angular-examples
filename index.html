@@ -6,43 +6,53 @@
 
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script> -->
   <script src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/angular-toastr/dist/angular-toastr.min.js"></script>
   <!-- modules -->
   <script src="./app/my-app.module.js"></script>
-  <!-- services -->
-  <script src="./app/feed.service.js"></script>
   <!-- controllers -->
   <script src="./app/main.contoller.js"></script>
+  <!-- services -->
+  <script src="./app/http.service.js"></script>
   <style>
     .red {
       color: red;
     }
+    button {
+      border-radius: 50%;
+    }
     .active {
-      border: 1px solid #000;
+      background-color: #FFA500;
     }
   </style>
 </head>
 <body ng-controller="MainController">
-<input ng-model="name" type="text" name="filter" class="filter">
-  <ul>
-    <li ng-repeat="(i, item) in dummy | orderBy:name | filter:name | limitTo:pageSize:firstItem">
-      <input type="checkbox" ng-checked="item.isActive">
-      <div><span>Id: </span>{{item.id + 1}}</div>
-      <div><span>Name: </span>{{item.name}}</div>
-      <div><span>Balance: </span>{{item.balance}}</div>
-      <div><span>Age: </span>{{item.age}}</div>
 
-      <div>
-        <img ng-src="{{item.picture}}" alt="img_{{$index}}">
-      </div>
-      <hr>
-    </li>
-  </ul>
+  <select ng-model="count" ng-options="opt.count as opt.name for opt in options">
+    <option value="">All</option>
+  </select>
 
-  <input ng-disabled="!(currentPage > 1)" ng-click="previousPage()" value="Previous page" name="Previous" type="submit" ng-cloak>
-  <ul class="pager page-{{currentPage}}">
-    <li ng-click="gotoPage(page)" class="page-number page-number-{{page}}" ng-repeat="page in pages" ng-cloak>{{page}}</li>
-  </ul>
-  <input ng-disabled="!(currentPage < pages.length)" ng-click="nextPage()" value="Next page" name="Next" type="submit" ng-cloak>
+  <div>
+    <button
+      ng-repeat="btn in pagingButtons track by $index" 
+      ng-class="{active: $index === currentPage}"
+      ng-click="changePage($index)"
+    >{{$index+1}}</button>
+  </div>
+
+  <table>
+    <tr>
+      <td>ID</td>
+      <td>Is Active</td>
+      <td>Name</td>
+      <td>Picture</td>
+    </tr>
+    <tr ng-repeat="item in data | limitTo:count:offset">
+      <td>{{item.id}}</td>
+      <td><input type="checkbox" ng-checked="item.isActive"></td>
+      <td>{{item.name}}</td>
+      <td><img ng-src="{{item.picture}}" alt="img_{{$index}}"></td>
+    </tr>
+  </table>
 
 </body>
 </html>
